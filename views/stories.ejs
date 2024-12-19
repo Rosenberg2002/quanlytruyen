@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Stories</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      display: flex;
+    }
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+      <h2>Admin Dashboard</h2>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="/customers">Manage Customers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/stories">Manage Stories</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/loaitruyen">Manage Categories</a>
+        </li>
+      </ul>
+    </div>
+  <div class="content">
+    <h1 class="mt-5">Stories</h1>
+    <form action="/stories/add" method="POST" class="mb-4">
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <input type="text" class="form-control" name="matruyen" placeholder="Story ID" required>
+        </div>
+        <div class="form-group col-md-4">
+          <input type="text" class="form-control" name="tentruyen" placeholder="Title" required>
+        </div>
+        <div class="form-group col-md-4">
+          <input type="text" class="form-control" name="tacgia" placeholder="Author">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <input type="number" class="form-control" name="soluong" placeholder="Quantity" min="0">
+        </div>
+        <div class="form-group col-md-4">
+          <input type="number" class="form-control" name="giathue" placeholder="Rental Price" step="0.01" min="0">
+        </div>
+        <div class="form-group col-md-4">
+          <input type="text" class="form-control" name="maloaitruyen" placeholder="Category ID" required>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Add Story</button>
+    </form>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Story ID</th>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Quantity</th>
+          <th>Rental Price</th>
+          <th>Category ID</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% stories.forEach(story => { %>
+          <tr>
+            <td><%= story.matruyen %></td>
+            <td><%= story.tentruyen %></td>
+            <td><%= story.tacgia %></td>
+            <td><%= story.soluong %></td>
+            <td><%= story.giathue %></td>
+            <td><%= story.maloaitruyen %></td>
+            <td>
+              <form action="/stories/delete/<%= story.matruyen %>" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+              <form action="/stories/update/<%= story.matruyen %>" method="POST" style="display:inline;">
+                <input type="text" class="form-control form-control-sm" name="tentruyen" value="<%= story.tentruyen %>" required>
+                <input type="text" class="form-control form-control-sm" name="tacgia" value="<%= story.tacgia %>">
+                <input type="number" class="form-control form-control-sm" name="soluong" value="<%= story.soluong %>" min="0">
+                <input type="number" class="form-control form-control-sm" name="giathue" value="<%= story.giathue %>" step="0.01" min="0">
+                <input type="text" class="form-control form-control-sm" name="maloaitruyen" value="<%= story.maloaitruyen %>" required>
+                <button type="submit" class="btn btn-warning btn-sm">Update</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
