@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      display: flex;
+    }
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+      <h2>Admin Dashboard</h2>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="/customers">Manage Customers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/stories">Manage Stories</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/loaitruyen">Manage Categories</a>
+        </li>
+      </ul>
+    </div>
+  <div class="content">
+    <h1 class="mt-5">Customers</h1>
+    <form action="/customers/add" method="POST" class="mb-4">
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <input type="text" class="form-control" name="ten" placeholder="Name" required>
+        </div>
+        <div class="form-group col-md-4">
+          <input type="date" class="form-control" name="ngaysinh" placeholder="Birthdate" required>
+        </div>
+        <div class="form-group col-md-4">
+          <input type="text" class="form-control" name="gioitinh" placeholder="Gender" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <input type="text" class="form-control" name="diachi" placeholder="Address" required>
+        </div>
+        <div class="form-group col-md-4">
+          <input type="text" class="form-control" name="sdt" placeholder="Phone" required>
+        </div>
+        <div class="form-group col-md-4">
+          <input type="email" class="form-control" name="email" placeholder="Email" required>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Add Customer</button>
+    </form>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Birthdate</th>
+          <th>Gender</th>
+          <th>Address</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% customers.forEach(customer => { %>
+          <tr>
+            <td><%= customer.hoten %></td>
+            <td><%= customer.ngaysinh %></td>
+            <td><%= customer.gioitinh %></td>
+            <td><%= customer.diachi %></td>
+            <td><%= customer.sodienthoai %></td>
+            <td><%= customer.email %></td>
+            <td>
+              <form action="/customers/delete/<%= customer.makhachhang %>" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+              <form action="/customers/update/<%= customer.makhachhang %>" method="POST" style="display:inline;">
+                <input type="text" class="form-control form-control-sm" name="ten" value="<%= customer.hoten %>" required>
+                <input type="date" class="form-control form-control-sm" name="ngaysinh" value="<%= customer.ngaysinh %>" required>
+                <input type="text" class="form-control form-control-sm" name="gioitinh" value="<%= customer.gioitinh %>" required>
+                <input type="text" class="form-control form-control-sm" name="diachi" value="<%= customer.diachi %>" required>
+                <input type="text" class="form-control form-control-sm" name="sdt" value="<%= customer.sodienthoai %>" required>
+                <input type="email" class="form-control form-control-sm" name="email" value="<%= customer.email %>" required>
+                <button type="submit" class="btn btn-warning btn-sm">Update</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

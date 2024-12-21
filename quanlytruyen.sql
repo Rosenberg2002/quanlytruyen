@@ -6,7 +6,7 @@ CREATE TABLE khachhang
     ngaysinh    DATE,                                          -- Ngày sinh
     gioitinh    VARCHAR(10) CHECK (gioitinh IN ('Nam', 'Nữ')), -- Giới tính chỉ cho phép "Nam" hoặc "Nữ"
     diachi      VARCHAR(100),
-    sodienthoai VARCHAR(15) ,                            -- Số điện thoại phải là duy nhất
+    sodienthoai VARCHAR(15) UNIQUE,                                  -- Số điện thoại phải là duy nhất
     email       VARCHAR(50) UNIQUE,                            -- Email phải là duy nhất
     tentaikhoan VARCHAR(50) UNIQUE,                            -- Tên tài khoản (duy nhất)
     matkhau     VARCHAR(100) NOT NULL                          -- Mật khẩu không được để trống
@@ -30,44 +30,41 @@ CREATE TABLE loaitruyen
     tenloai      VARCHAR(50) NOT NULL UNIQUE -- Tên loại truyện phải là duy nhất
 );
 
--- Bảng: Truyen
+-- Bảng: Truyện
 CREATE TABLE truyen
 (
-    matruyen     VARCHAR(10) PRIMARY KEY,            -- Mã truyện [TR0001, TR0002...]
-    tentruyen    VARCHAR(50) NOT NULL,               -- Tên truyện không được để trống
-    tacgia       VARCHAR(50),                        -- Tác giả
-    soluong      INT CHECK (soluong >= 0),           -- Số lượng >= 0
-    giathue      DECIMAL(10, 2) CHECK (giathue > 0), -- Giá thuê phải lớn hơn 0
-    maloaitruyen VARCHAR(10) NOT NULL,               -- Mã loại truyện
+    matruyen     VARCHAR(10) PRIMARY KEY,                                       -- Mã truyện [TR0001, TR0002...]
+    tentruyen    VARCHAR(50) NOT NULL,                                          -- Tên truyện không được để trống
+    tacgia       VARCHAR(50),                                                   -- Tác giả
+    soluong      INT CHECK (soluong >= 0),                                      -- Số lượng >= 0
+    giathue      DECIMAL(10, 2) CHECK (giathue > 0),                            -- Giá thuê phải lớn hơn 0
+    maloaitruyen VARCHAR(10) NOT NULL,                                          -- Mã loại truyện
     FOREIGN KEY (maloaitruyen) REFERENCES loaitruyen (maloaitruyen)
 );
 
 -- Bảng: HoatDongThue
 CREATE TABLE hoatdongthue
 (
-    mahoatdong    VARCHAR(10) PRIMARY KEY,         -- Mã hoạt động thuê [HD0001, HD0002...]
-    mataikhoan    VARCHAR(10)            NOT NULL, -- Mã tài khoản
-    makhachhang   VARCHAR(10)            NOT NULL, -- Mã khách hàng
-    ngaylap       DATE DEFAULT CURDATE() NOT NULL, -- Ngày lập hóa đơn, mặc định là ngày hiện tại
-    hantra        DATE                   NOT NULL, -- Hạn trả phải lớn hơn ngày lập hóa đơn
-    trangthaithue VARCHAR(20)            NOT NULL, -- Trạng thái thuê
-    FOREIGN KEY (mataikhoan) REFERENCES taikhoan (mataikhoan),
+    mahoatdong    VARCHAR(10) PRIMARY KEY,                                  -- Mã hoạt động thuê [HD0001, HD0002...]
+    makhachhang   VARCHAR(10)            NOT NULL,                          -- Mã khách hàng
+    ngaylap       DATE DEFAULT CURDATE() NOT NULL,                          -- Ngày lập hóa đơn, mặc định là ngày hiện tại
+    hantra        DATE                   NOT NULL,                          -- Hạn trả phải lớn hơn ngày lập hóa đơn
+    trangthaithue VARCHAR(20)            NOT NULL,                          -- Trạng thái thuê
     FOREIGN KEY (makhachhang) REFERENCES khachhang (makhachhang)
 );
 
 -- Bảng: ChiTietThue
 CREATE TABLE chitietthue
 (
-    mahoatdong VARCHAR(10),                        -- Mã hoạt động thuê
-    matruyen   VARCHAR(10),                        -- Mã truyện
-    soluong    INT CHECK (soluong > 0),            -- Số lượng thuê > 0
-    giathue    DECIMAL(10, 2) CHECK (giathue > 0), -- Giá thuê > 0
-    PRIMARY KEY (mahoatdong, matruyen),            -- Khóa chính kết hợp
+    mahoatdong VARCHAR(10),                                                 -- Mã hoạt động thuê
+    matruyen   VARCHAR(10),                                                 -- Mã truyện
+    soluong    INT CHECK (soluong > 0),                                     -- Số lượng thuê > 0
+    giathue    DECIMAL(10, 2) CHECK (giathue > 0),                          -- Giá thuê > 0
+    PRIMARY KEY (mahoatdong, matruyen),                                     -- Khóa chính kết hợp
     FOREIGN KEY (mahoatdong) REFERENCES hoatdongthue (mahoatdong),
     FOREIGN KEY (matruyen) REFERENCES truyen (matruyen)
 );
 
-//lam sao sinh dc script nay, lam sao bo 
 -- INSERT Bảng KhachHang
 INSERT INTO khachhang (makhachhang, hoten, ngaysinh, gioitinh, diachi, sodienthoai, email, tentaikhoan, matkhau)
 VALUES ('KH0001', 'Nguyen Van A', STR_TO_DATE('1990-01-01', '%Y-%m-%d'), 'Nam', 'Hanoi', '0123456789', 'a@example.com', 'nguyenvana', 'password123'),
